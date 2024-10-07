@@ -1,0 +1,117 @@
+<div class="row align-items-md-stretch p-2 ">
+    <div class="col-md-4">
+        <div class=" w-80 p-4 text-bg-dark rounded-3 form-task">
+            <h2>
+            @if (isEdit){
+                Edit
+            }
+            @else{
+                Add
+            }
+            Task</h2>
+            <form class="mt-3 w-70" action="" method="post">
+            <input 
+              [(ngModel)]="selectedTask.title" 
+              name="title" 
+              class="form-control mb-3 inp " 
+              type="text" 
+              placeholder="Title" 
+              aria-label="Title input">
+            
+            <input 
+            [(ngModel)]="selectedTask.description" 
+            name="description" 
+            class="form-control mb-3 inp " 
+            type="text" 
+            placeholder="Description" 
+            aria-label="Description input">
+
+            <textarea *ngIf="isEdit"
+              [(ngModel)]="selectedTask.quote" 
+              name="quote" 
+              class="form-control mb-3 inp " 
+              placeholder="Quote" 
+              rows="4" 
+              aria-label="Quote input">
+            </textarea>
+          
+            <button 
+              (click)="addOrEdit()" 
+              [ngClass]="{'btn_edit': isEdit, 'btn_add': !isEdit}" 
+              type="button" 
+              class="btn btn-primary ">
+              {{ isEdit ? 'Edit' : 'Add' }}  
+            </button>
+            
+
+            <button 
+              *ngIf="isEdit" 
+              (click)="clearSelectedTask()" 
+              type="button" 
+              class="btn border-0 btn_add_edit text-white m-2">
+              Add  
+            </button>
+          </form>
+          
+        </div>
+    </div>
+
+    <!-- Filtro de búsqueda de tareas -->
+    <div class="col-md-8">
+        <div class=" w-80 p-4 text-bg-dark rounded-3  task-list">
+        <!-- Campo de búsqueda para filtrar tareas por título -->
+        <form class="row">
+            <div class="col-md-3">
+                <h2>Task List</h2>
+            </div>
+            
+        </form>
+        @if(taskArray.length==0){
+            <div class="empty-alert">
+                <h1>👻</h1>
+                <h2>there are currently no scheduled tasks </h2>
+            </div>
+        }@else{
+            <!-- Lista de tareas mostradas, filtradas o completas -->
+            <div class="row row-cols-1 row-cols-lg-2 align-items-stretch w-70 task-list-container">
+                <div 
+                *ngFor="let task of   taskArray"
+                [ngClass]="{ 'selected': selectedTask === task }"
+                class="col item_task p-4">
+                    <h5>{{task.title}}</h5>
+                    <h6 class="description-text">{{task.description}}</h6>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <small class="d-block text-secondary">
+                                quote: {{task.quote}} 
+                            </small>
+                        </div>
+                        <div class="col-md-2">
+                            <i 
+                            (click)="openForEdit(task)"
+                            class="bi bi-pencil icon_btn_edit"></i>
+                        </div>
+                        <div class="col-md-2">
+                            <i 
+                            (click)="delete(task)" 
+                            class="bi bi-trash3  icon_btn_delete"></i>
+                        </div>
+                    </div>
+                    
+                    <div 
+                        class="check-task" 
+                        [ngClass]="{ 'task-completed': task.completed, 'task-not-completed': !task.completed }"
+                        (click)="toggleCompletion(task)">
+                        <i class="bi bi-check-lg"></i>
+                        
+                    </div>
+                    <p>Hola: {{task.completed}}</p>
+                </div>
+            </div>
+            }
+        
+        </div>
+    </div>
+  
+
+</div> 
